@@ -44,7 +44,20 @@ app.delete('/tasks/:id', (req, res) => {
   tasks.splice(index, 1);
   res.json({ message: 'Task deleted successfully' });
 });
+// Route 5: Update a task
+app.put('/tasks/:id', (req, res) => {
+  const taskId = parseInt(req.params.id);
+  const task = tasks.find(t => t.id === taskId);
 
+  if (!task) {
+    return res.status(404).json({ message: 'Task not found' });
+  }
+
+  task.title = req.body.title || task.title;
+  task.done = req.body.done !== undefined ? req.body.done : task.done;
+
+  res.json(task);
+});
 // --- IN-MEMORY DATA (like a working storage section in COBOL) ---
 let tasks = [
   { id: 1, title: 'Learn Node.js', done: false },
